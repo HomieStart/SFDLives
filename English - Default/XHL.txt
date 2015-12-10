@@ -133,7 +133,7 @@
 		}
 
 		public void StartXHLXF(){
-			Game.RunCommand("/MSG "+"XHomieFunXLife: Downloaded in XHomie Page");
+			Game.RunCommand("/MSG "+"XHomieFunXLife: Alpha");
 			if(!trainingMode)
 				Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" lives");
 			else
@@ -291,13 +291,13 @@
 					}
 					else if(teams[0] != PlayerTeam.Independent){
 						switch(teams[0]){
-						case PlayerTeam.Team1 : msj = "Team Azul"; break;//"Blue Team"; break;
-						case PlayerTeam.Team2 : msj = "Team Rojo"; break;//"Red Team"; break;
-						case PlayerTeam.Team3 : msj = "Team Verde"; break;//"Green Team"; break;
-						case PlayerTeam.Team4 : msj = "Team Amarillo"; break; //"Yellow Team"; break;
+						case PlayerTeam.Team1 : msj = "Blue Team"; break;
+						case PlayerTeam.Team2 : msj = "Red Team"; break;
+						case PlayerTeam.Team3 : msj = "Green Team"; break;
+						case PlayerTeam.Team4 : msj = "Yellow Team"; break;
 						}; 
 						if(playersOnTeam > 1){
-							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"/nAnd the "+msj+" Are the Winners!");//" Winners!");
+							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"/nAnd the "+msj+" Are the Winners!");
 							return;}
 						else {
 							if(MapPlayers[0].GetLifes()>1)
