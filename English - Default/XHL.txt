@@ -421,7 +421,8 @@
 								if(chatStatusLives && !trainingMode)
 									Game.RunCommand("/MSG "+"Dead:"+MapPlayers[i].GetFisicPlayer().GetUser().Name);
 								MapPlayers[i] = null;
-								MapPlayers.Remove(MapPlayers[i]); 							}
+								MapPlayers.Remove(MapPlayers[i]); 							
+								}
 						}else{
 							MapPlayers[i] = null;
 							MapPlayers.Remove(MapPlayers[i]);
