@@ -46,6 +46,7 @@
 		private static String names;
 		private static IObjectTimerTrigger dialog;
 		private static bool pop;	 
+		private static int users;
 		// <===================<XCODE>=================>
 		private class Player{
 			private bool live = true;
@@ -208,6 +209,7 @@
 								}else{
 									MapPlayers[i] = null;
 									MapPlayers.Remove(MapPlayers[i]);
+									users--;
 									break;
 								}
 							}
@@ -226,29 +228,32 @@
 		}
 
 		private void CheckNewUserActive(){
-			bool exist = true;
-			IUser user = null;
-			foreach(IUser usr in Game.GetActiveUsers()){
-				if(!existHere(usr)){
-					user = usr;
-					exist = false;
-					break;
+			if(Game.GetActiveUsers().Length > users){
+				bool exist = true;
+				IUser user = null;
+				foreach(IUser usr in Game.GetActiveUsers()){
+					if(!existHere(usr)){
+						user = usr;
+						exist = false;
+						break;
+					}
 				}
-			}
-			if(!exist && user != null){
-				IPlayer pl = Game.CreatePlayer(RandomSpawn());   
-				pl.SetProfile(user.GetProfile());
-				pl.SetUser(user);
-				//chk pl.SetTeam(user.GetTeam());
-				if (sharedItemOfStart) {
-					Weapons = MapPlayers[0].GetWeapons();
-					for(int j=0;j<Weapons.Length;j++)
-						pl.GiveWeaponItem(Weapons[j]);  
-					Weapons = null;      				 
+				if(!exist && user != null){
+					IPlayer pl = Game.CreatePlayer(RandomSpawn());   
+					pl.SetProfile(user.GetProfile());
+					pl.SetUser(user);
+					//chk pl.SetTeam(user.GetTeam());
+					if (sharedItemOfStart) {
+						Weapons = MapPlayers[0].GetWeapons();
+						for(int j=0;j<Weapons.Length;j++)
+							pl.GiveWeaponItem(Weapons[j]);  
+							Weapons = null;      				 
+						}
+					MapPlayers.Add(new Player(pl));
+					users++;
 				}
-				MapPlayers.Add(new Player(pl));
+	
 			}
-
 		}
 
 		private bool existHere(IUser user){
@@ -338,7 +343,7 @@
 				teams.Clear();
 			if(random == null)
 				random = new Random();
-			int users = 0;
+			users = 0;
 			foreach(IPlayer pl in Game.GetPlayers()){
 				if(pl.IsUser && !pl.IsRemoved){
 					users++;
@@ -417,7 +422,8 @@
 							}
 						}else{
 							MapPlayers[i] = null;
-							MapPlayers.Remove(MapPlayers[i]); 
+							MapPlayers.Remove(MapPlayers[i]);
+							users--;
 						}
 						break;
 					}	
