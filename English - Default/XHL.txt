@@ -1,7 +1,7 @@
 /*
 	 <====================== XHOMIE Code =================================>
 	 <====================================================================> 
-	 <========= If you liked the XHOMIEFUNXLIVE, you can contact me, =====> 
+	 <========= If you liked the XHOMIEFUNXLIFE, you can contact me, =====> 
 	 <=========     I will be delighted to attend thanks to          =====> 
 	 <====================================================================> 
 	 <=============  If you liked the IAngry, you can contact me, ========> 
@@ -133,7 +133,7 @@
 		}
 
 		public void StartXHLXF(){
-			Game.RunCommand("/MSG "+"XHomieFunXLive: Downloaded in XHomie Page");
+			Game.RunCommand("/MSG "+"XHomieFunXLife: Downloaded in XHomie Page");
 			if(!trainingMode)
 				Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" lives");
 			else
