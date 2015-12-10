@@ -1,4 +1,4 @@
-/*
+	/*
 	 <====================== XHOMIE Code =================================>
 	 <====================================================================> 
 	 <========= If you liked the XHOMIEFUNXLIFE, you can contact me, =====> 
@@ -47,6 +47,7 @@
 		private static IObjectTimerTrigger dialog;
 		private static bool pop;	 
 		private static int users;
+		private static int spawners;
 		// <===================<XCODE>=================>
 		private class Player{
 			private bool live = true;
@@ -140,6 +141,7 @@
 			else
 				Game.RunCommand("/MSG "+"TRAINING MODE: ON");
 			contDialog = 0;
+			spawners = 0;
 			pop = false;
 			if(rulesOfThisMod)
 				Game.SetMapType(MapType.Custom);
@@ -177,39 +179,42 @@
 					CheckGameOver();
 				if(trainingMode)
 					CheckNewUserActive();
-				if(MapPlayers.Count > 0){
-					for(int i=0;i<MapPlayers.Count;i++){
-						if(MapPlayers[i].CanSpawn() && !MapPlayers[i].isLive()){
-							if((Game.TotalElapsedGameTime - MapPlayers[i].GetTimeSpawn()) >= timeForSpawn){ 
-								if(CheckUserActive(MapPlayers[i])){
-									IPlayer pl = Game.CreatePlayer(RandomSpawn());   
-									pl.SetProfile(MapPlayers[i].GetFisicPlayer().GetProfile());
-									pl.SetTeam(MapPlayers[i].GetFisicPlayer().GetTeam());
-									pl.SetUser(MapPlayers[i].GetFisicPlayer().GetUser());
-									Game.PlayEffect("Electric",pl.GetWorldPosition());
-									if(gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved)
-										MapPlayers[i].GetFisicPlayer().Gib();
-									else if (!gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved) {
-										if(MapPlayers[i].GetFisicPlayer() != null){
-											Game.PlayEffect("Electric",MapPlayers[i].GetFisicPlayer().GetWorldPosition());
-											MapPlayers[i].GetFisicPlayer().Remove();
+				if(spawners > 0){
+					if(MapPlayers.Count > 0){
+						for(int i=0;i<MapPlayers.Count;i++){
+							if(MapPlayers[i].CanSpawn() && !MapPlayers[i].isLive()){
+								if((Game.TotalElapsedGameTime - MapPlayers[i].GetTimeSpawn()) >= timeForSpawn){ 
+									if(CheckUserActive(MapPlayers[i])){
+										IPlayer pl = Game.CreatePlayer(RandomSpawn());   
+										pl.SetProfile(MapPlayers[i].GetFisicPlayer().GetProfile());
+										pl.SetTeam(MapPlayers[i].GetFisicPlayer().GetTeam());
+										pl.SetUser(MapPlayers[i].GetFisicPlayer().GetUser());
+										Game.PlayEffect("Electric",pl.GetWorldPosition());
+										if(gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved)
+											MapPlayers[i].GetFisicPlayer().Gib();
+										else if (!gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved) {
+											if(MapPlayers[i].GetFisicPlayer() != null){
+												Game.PlayEffect("Electric",MapPlayers[i].GetFisicPlayer().GetWorldPosition());
+												MapPlayers[i].GetFisicPlayer().Remove();
+											}
 										}
+										if(!trainingMode)
+											MapPlayers[i].Respawed(); 	
+										MapPlayers[i].SetFisicPlayer(pl);
+										MapPlayers[i].SetLive(true);
+										MapPlayers[i].SetCanSpawn(false);
+										if (sharedItemOfStart) {
+											Weapons = MapPlayers[i].GetWeapons();
+											for(int j=0;j<Weapons.Length;j++)
+												pl.GiveWeaponItem(Weapons[j]);  
+											Weapons = null;             				 
+										}
+									}else{
+										MapPlayers[i] = null;
+										MapPlayers.Remove(MapPlayers[i]);
+										users--;
 									}
-									if(!trainingMode)
-										MapPlayers[i].Respawed(); 	
-									MapPlayers[i].SetFisicPlayer(pl);
-									MapPlayers[i].SetLive(true);
-									MapPlayers[i].SetCanSpawn(false);
-									if (sharedItemOfStart) {
-										Weapons = MapPlayers[i].GetWeapons();
-										for(int j=0;j<Weapons.Length;j++)
-											pl.GiveWeaponItem(Weapons[j]);  
-										Weapons = null;             				 
-									}
-								}else{
-									MapPlayers[i] = null;
-									MapPlayers.Remove(MapPlayers[i]);
-									users--;
+									spawners--;
 									break;
 								}
 							}
@@ -247,12 +252,12 @@
 						Weapons = MapPlayers[0].GetWeapons();
 						for(int j=0;j<Weapons.Length;j++)
 							pl.GiveWeaponItem(Weapons[j]);  
-							Weapons = null;      				 
-						}
+						Weapons = null;      				 
+					}
 					MapPlayers.Add(new Player(pl));
 					users++;
 				}
-	
+
 			}
 		}
 
@@ -311,7 +316,7 @@
 								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Live and " + msj + " Are the Winners!";
 							else
 								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the Winners!";
-								Game.SetGameOver(msj);
+							Game.SetGameOver(msj);
 						}return;
 					}
 				}
@@ -394,8 +399,7 @@
 										else
 											Game.ShowPopupMessage(names, Color.Red);
 									}
-								}		
-								break;					
+								}				
 							}
 							else{
 								if(popUpStatus && !trainingMode){
@@ -417,14 +421,13 @@
 								if(chatStatusLives && !trainingMode)
 									Game.RunCommand("/MSG "+"Dead:"+MapPlayers[i].GetFisicPlayer().GetUser().Name);
 								MapPlayers[i] = null;
-								MapPlayers.Remove(MapPlayers[i]); 
-								break;
-							}
+								MapPlayers.Remove(MapPlayers[i]); 							}
 						}else{
 							MapPlayers[i] = null;
 							MapPlayers.Remove(MapPlayers[i]);
 							users--;
 						}
+						spawners++;
 						break;
 					}	
 				}
@@ -464,7 +467,7 @@
 			}
 		}
 	}
-	
+
 	public static bool activated = true;
 	private static XHomieFunXLife XH;
 
@@ -475,7 +478,7 @@
 			XH.StartXHLXF();
 		}
 	}
-	
+
 	public void CheckGame(TriggerArgs args){
 		XH.CheckGame();
 	}
