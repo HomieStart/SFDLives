@@ -477,6 +477,6 @@
 		XH.CheckDialog();
 	}
 
-	//                       XHomieFunxLife 1.1V                        
+	//                       XHomieFunxLife 0.8V                        
 	// <=========================<F-XHOMIE>============================>
 	// <===============<XHomieFunxLife for the Community>==============>
