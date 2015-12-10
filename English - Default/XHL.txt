@@ -25,7 +25,7 @@
 	 */
 	public class XHomieFunXLife{
 		// <====== Setting for you custom game, you can change =========>
-		private static bool trainingMode = false ; // if Never die
+		private static bool trainingMode = true; // if Never die
 		private static int liveOnStart = 3; // Lives for All
 		private static float timeForSpawn = 5000f; // time for respawn
 		private static bool rulesOfThisMod = true; // if rules given of this mod
@@ -149,7 +149,7 @@
 			AddT_Trigger(0,0,"CheckGame","XH-3001",false,true);
 			if(whitTimerDialog){
 				if(dialog == null)
-					AddT_Trigger(5000,1,"CheckDialog","XH-3001",true,false);		
+					AddT_Trigger(5000,0,"CheckDialog","XH-3001",true,false);		
 			}
 			AddD_Trigger("CheckPlayers","XH-3002");
 			if(trainingMode)
@@ -183,7 +183,7 @@
 					if(MapPlayers.Count > 0){
 						for(int i=0;i<MapPlayers.Count;i++){
 							if(MapPlayers[i].CanSpawn() && !MapPlayers[i].isLive()){
-								if((Game.TotalElapsedGameTime - MapPlayers[i].GetTimeSpawn()) >= timeForSpawn){ 
+								if((Game.TotalElapsedGameTime - MapPlayers[i].GetTimeSpawn()) >= timeForSpawn){
 									if(CheckUserActive(MapPlayers[i])){
 										IPlayer pl = Game.CreatePlayer(RandomSpawn());   
 										pl.SetProfile(MapPlayers[i].GetFisicPlayer().GetProfile());
@@ -372,6 +372,7 @@
 							if(MapPlayers[i].GetLifes() > 0){
 								MapPlayers[i].SetCanSpawn(true);
 								MapPlayers[i].SetTimeSpawn(Game.TotalElapsedGameTime);
+								spawners++;
 								if(chatStatusLives)
 									Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Lives Left");
 								if(popUpStatus && !trainingMode){
@@ -428,7 +429,6 @@
 							MapPlayers.Remove(MapPlayers[i]);
 							users--;
 						}
-						spawners++;
 						break;
 					}	
 				}
