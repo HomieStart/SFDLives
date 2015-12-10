@@ -280,9 +280,9 @@
 					String msj = "";
 					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
 						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
-						if(MapPlayers[0].GetLifes()>1)
+						if(MapPlayers[0].GetLifes()>0)
 							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
-						else if(MapPlayers[0].GetLifes()==1)
+						else if(MapPlayers[0].GetLifes()==0)
 							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
 						else
 							msj = msj + " Is Winner!";
@@ -300,9 +300,9 @@
 							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"/nAnd the "+msj+" Are the Winners!");
 							return;}
 						else {
-							if(MapPlayers[0].GetLifes()>1)
+							if(MapPlayers[0].GetLifes()>0)
 								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Lives and " + msj + " Are the Winners!";
-							else if(MapPlayers[0].GetLifes()==1)
+							else if(MapPlayers[0].GetLifes()==0)
 								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Live and " + msj + " Are the Winners!";
 							else
 								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the Winners!";
