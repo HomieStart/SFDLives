@@ -1,0 +1,482 @@
+/*
+	 <====================== XHOMIE Code =================================>
+	 <====================================================================> 
+	 <========= If you liked the XHOMIEFUNXLIVE, you can contact me, =====> 
+	 <=========     I will be delighted to attend thanks to          =====> 
+	 <====================================================================> 
+	 <=============  If you liked the IAngry, you can contact me, ========> 
+	 <=============  I will be delighted to attend thanks to      ========> 
+	 <=============  suggestions or ideas for new script :)       ========> 
+	 <====================================================================> 
+	 <===============    Tr.x.Homie@gmail.com    =========================> 
+	 <=============== © 2015 By Freddy of XHomie =========================> 
+	 <====================================================================> 
+	 <=========== Setting for you custom game, you can change ============> 
+	 <====================================================================> 
+	 <====================== XHOMIE Code =================================> 
+	 <====================================================================>
+	 <============== If you liked the IAngry, you can contact me, ========>
+	 <==============  I will be delighted to attend thanks to     ========>
+	 <==============  suggestions or ideas for new script :)      ========>
+	 <====================================================================>
+	 <================    Tr.x.Homie@gmail.com    ========================>
+	 <================ © 2015 By Freddy of XHomie ========================>
+	 <====================================================================>
+	 */
+	public class XHomieFunXLife{
+		// <====== Setting for you custom game, you can change =========>
+		private static bool trainingMode = false ; // if Never die
+		private static int liveOnStart = 3; // Lives for All
+		private static float timeForSpawn = 5000f; // time for respawn
+		private static bool rulesOfThisMod = true; // if rules given of this mod
+		private static bool whitTimerDialog = true;  // if the status have time for hide
+		private static bool popUpStatus = true; // show a status message
+		private static bool gibPlayer = false; // if gib the player when respawn
+		private static int largeOfName = 5; // large of name on status whitout timer for hide
+		private static bool chatStatusLives = false; // if show status in the chat
+		private static bool sharedItemOfStart = true; // if the players share first items
+		// <====================================================================>
+		// <================<properties>=================>
+		private static List<PlayerTeam> teams;
+		private static List <Player> MapPlayers;
+		private static WeaponItem[] Weapons;
+		private static Random random;
+		private static bool gameStart;
+		private static int contDialog;
+		private static String names;
+		private static IObjectTimerTrigger dialog;
+		private static bool pop;	 
+		// <===================<XCODE>=================>
+		private class Player{
+			private bool live = true;
+			private bool canSpawn = false;
+			private int lifes = liveOnStart - 1;
+			private float timeSpawn = 0;
+			private IPlayer pl = null;
+			private IUser user = null;
+			private WeaponItem item1;
+			private WeaponItem item2;
+			private WeaponItem item3;
+			private WeaponItem item4;
+			private WeaponItem item5;
+			private WeaponItem item6;
+			public Player(IPlayer pl){
+				this.pl = pl;
+				this.user = pl.GetUser();
+				if(sharedItemOfStart){
+					this.item1 = pl.CurrentMeleeWeapon.WeaponItem;
+					this.item2 = pl.CurrentMeleeMakeshiftWeapon.WeaponItem;
+					this.item3 = pl.CurrentPrimaryWeapon.WeaponItem;
+					this.item4 = pl.CurrentSecondaryWeapon.WeaponItem;
+					this.item5 = pl.CurrentPowerupItem.WeaponItem;
+					this.item6 = pl.CurrentThrownItem.WeaponItem;
+				}
+			}
+			public void SetCanSpawn(bool canSpawn){
+				this.canSpawn = canSpawn;
+			}
+
+			public void SetLive(bool live){
+				this.live = live;
+			}
+
+			public void SetFisicPlayer(IPlayer pl){
+				this.pl = pl;
+			}
+
+			public void SetTimeSpawn(float time){
+				this.timeSpawn = time;
+			}
+
+			public void Respawed(){
+				this.lifes--;
+			}
+
+			public bool CanSpawn(){
+				return this.canSpawn;
+			}
+
+			public bool isLive(){
+				return this.live;
+			}
+
+			public int GetLifes(){
+				return this.lifes;
+			}
+
+			public long GetUserID(){
+				return this.user.UserId;
+			}
+
+			public IPlayer GetFisicPlayer(){
+				return this.pl;
+			}
+
+			public IUser GetUser(){
+				return this.user;
+			}
+
+			public float GetTimeSpawn(){
+				return this.timeSpawn;
+			}
+
+			public WeaponItem[] GetWeapons(){
+				WeaponItem[] weapons = new WeaponItem[]{item1,item2,item3,item4,item5,item6};
+				return weapons;
+			}
+		}
+
+		public void OnStartup(){
+			if(activated){
+				StartXHLXF();
+			}
+		}
+
+		public void StartXHLXF(){
+			Game.RunCommand("/MSG "+"XHomieFunXLive: Downloaded in XHomie Page");
+			if(!trainingMode)
+				Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" lives");
+			else
+				Game.RunCommand("/MSG "+"TRAINING MODE: ON");
+			contDialog = 0;
+			pop = false;
+			if(rulesOfThisMod)
+				Game.SetMapType(MapType.Custom);
+			CheckUser();
+			AddT_Trigger(0,0,"CheckGame","XH-3001",false,true);
+			if(whitTimerDialog){
+				if(dialog == null)
+					AddT_Trigger(5000,1,"CheckDialog","XH-3001",true,false);		
+			}
+			AddD_Trigger("CheckPlayers","XH-3002");
+			if(trainingMode)
+				Game.ShowPopupMessage("TRAINING MODE",Color.Green);
+
+		}
+
+		public void CheckDialog(){//TriggerArgs args){
+			if(!Game.IsGameOver){
+				if(!pop && MapPlayers != null){
+					pop = true;
+					dialog.SetIntervalTime(2500);
+					dialog.Trigger();
+					Game.ShowPopupMessage(names, Color.Cyan);
+				}
+				else if(pop){
+					pop = false;
+					names = "";
+					Game.HidePopupMessage();
+				}
+			}
+		}
+
+		public void CheckGame(){//TriggerArgs args){
+			if(!Game.IsGameOver){
+				if(rulesOfThisMod && !trainingMode)
+					CheckGameOver();
+				if(trainingMode)
+					CheckNewUserActive();
+				if(MapPlayers.Count > 0){
+					for(int i=0;i<MapPlayers.Count;i++){
+						if(MapPlayers[i].CanSpawn() && !MapPlayers[i].isLive()){
+							if((Game.TotalElapsedGameTime - MapPlayers[i].GetTimeSpawn()) >= timeForSpawn){ 
+								if(CheckUserActive(MapPlayers[i])){
+									IPlayer pl = Game.CreatePlayer(RandomSpawn());   
+									pl.SetProfile(MapPlayers[i].GetFisicPlayer().GetProfile());
+									pl.SetTeam(MapPlayers[i].GetFisicPlayer().GetTeam());
+									pl.SetUser(MapPlayers[i].GetFisicPlayer().GetUser());
+									Game.PlayEffect("Electric",pl.GetWorldPosition());
+									if(gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved)
+										MapPlayers[i].GetFisicPlayer().Gib();
+									else if (!gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved) {
+										if(MapPlayers[i].GetFisicPlayer() != null){
+											Game.PlayEffect("Electric",MapPlayers[i].GetFisicPlayer().GetWorldPosition());
+											MapPlayers[i].GetFisicPlayer().Remove();
+										}
+									}
+									if(!trainingMode)
+										MapPlayers[i].Respawed(); 	
+									MapPlayers[i].SetFisicPlayer(pl);
+									MapPlayers[i].SetLive(true);
+									MapPlayers[i].SetCanSpawn(false);
+									if (sharedItemOfStart) {
+										Weapons = MapPlayers[i].GetWeapons();
+										for(int j=0;j<Weapons.Length;j++)
+											pl.GiveWeaponItem(Weapons[j]);  
+										Weapons = null;             				 
+									}
+								}else{
+									MapPlayers[i] = null;
+									MapPlayers.Remove(MapPlayers[i]);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private bool CheckUserActive(Player pl){
+			foreach(IUser user in Game.GetActiveUsers()){
+				if(user.UserId == pl.GetUserID())
+					return true;
+			}
+			return false;
+		}
+
+		private void CheckNewUserActive(){
+			bool exist = true;
+			IUser user = null;
+			foreach(IUser usr in Game.GetActiveUsers()){
+				if(!existHere(usr)){
+					user = usr;
+					exist = false;
+					break;
+				}
+			}
+			if(!exist && user != null){
+				IPlayer pl = Game.CreatePlayer(RandomSpawn());   
+				pl.SetProfile(user.GetProfile());
+				pl.SetUser(user);
+				//chk pl.SetTeam(user.GetTeam());
+				if (sharedItemOfStart) {
+					Weapons = MapPlayers[0].GetWeapons();
+					for(int j=0;j<Weapons.Length;j++)
+						pl.GiveWeaponItem(Weapons[j]);  
+					Weapons = null;      				 
+				}
+				MapPlayers.Add(new Player(pl));
+			}
+
+		}
+
+		private bool existHere(IUser user){
+			foreach(Player pl in MapPlayers){
+				if(user.UserID == pl.GetUser().UserID)
+					return true;
+			}
+			return false;
+		}
+
+		private void CheckGameOver(){
+			if(MapPlayers.Count <= 0){
+				Game.SetGameOver("No Players Wins");
+				return;
+			}
+			else{
+				if(gameStart){
+					int playersOnTeam = 0;
+					foreach(Player pl in MapPlayers){
+						if(!teams.Contains(pl.GetFisicPlayer().GetTeam()))
+							teams.Add(pl.GetFisicPlayer().GetTeam());
+						if(teams[0] == pl.GetFisicPlayer().GetTeam() && teams.Count < 2)
+							playersOnTeam++;
+						else{
+							teams.Clear();
+							return;
+						}
+					}
+					String msj = "";
+					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
+						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
+						if(MapPlayers[0].GetLifes()>1)
+							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
+						else if(MapPlayers[0].GetLifes()==1)
+							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
+						else
+							msj = msj + " Is Winner!";
+						Game.SetGameOver(msj);
+						return;
+					}
+					else if(teams[0] != PlayerTeam.Independent){
+						switch(teams[0]){
+						case PlayerTeam.Team1 : msj = "Team Azul"; break;//"Blue Team"; break;
+						case PlayerTeam.Team2 : msj = "Team Rojo"; break;//"Red Team"; break;
+						case PlayerTeam.Team3 : msj = "Team Verde"; break;//"Green Team"; break;
+						case PlayerTeam.Team4 : msj = "Team Amarillo"; break; //"Yellow Team"; break;
+						}; 
+						if(playersOnTeam > 1){
+							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"/nAnd the "+msj+" Are the Winners!");//" Winners!");
+							return;}
+						else {
+							if(MapPlayers[0].GetLifes()>1)
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Lives and " + msj + " Are the Winners!";
+							else if(MapPlayers[0].GetLifes()==1)
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Live and " + msj + " Are the Winners!";
+							else
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the Winners!";
+								Game.SetGameOver(msj);
+						}return;
+					}
+				}
+			}
+		}
+
+		private void PortatePopUp(){
+			if(popUpStatus && !Game.IsGameOver){
+				if(!pop)
+					pop = true;
+				Game.ShowPopupMessage(names, Color.Green);
+			}
+			else if(Game.IsGameOver && pop){
+				if(pop)
+					pop = false;
+				Game.HidePopupMessage();
+			}
+		}
+
+
+		private void CheckUser(){
+			if(MapPlayers == null)
+				MapPlayers = new List<Player>();
+			else
+				MapPlayers.Clear();
+			if(teams == null)
+				teams = new List<PlayerTeam>();
+			else
+				teams.Clear();
+			if(random == null)
+				random = new Random();
+			int users = 0;
+			foreach(IPlayer pl in Game.GetPlayers()){
+				if(pl.IsUser && !pl.IsRemoved){
+					users++;
+					MapPlayers.Add(new Player(pl));
+				}
+			}
+			if(users > 1){
+				gameStart = true;
+			}
+			else{
+				gameStart = false;
+			}
+		}
+
+		public void CheckPlayers(IPlayer pl){//TriggerArgs args){
+			if(MapPlayers != null){
+				for(int i=0;i<MapPlayers.Count;i++){
+					if(pl == MapPlayers[i].GetFisicPlayer()){
+						if(pl.GetUser() != null && CheckUserActive(MapPlayers[i])){
+							MapPlayers[i].SetLive(false);
+							if(MapPlayers[i].GetLifes() > 0){
+								MapPlayers[i].SetCanSpawn(true);
+								MapPlayers[i].SetTimeSpawn(Game.TotalElapsedGameTime);
+								if(chatStatusLives)
+									Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Lives Left");
+								if(popUpStatus && !trainingMode){
+									if(whitTimerDialog){
+										contDialog++;
+										if(contDialog > 5)
+										{
+											contDialog = 0;
+											names = "";
+										}
+										names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
+										pop = false;
+										dialog.SetIntervalTime(500);
+										dialog.Trigger();}
+									else{
+										names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
+										if(MapPlayers[i].GetLifes() > 5)
+											Game.ShowPopupMessage(names, Color.Blue);
+										else if(MapPlayers[i].GetLifes() > 3 && MapPlayers[i].GetLifes() < 6)
+											Game.ShowPopupMessage(names, Color.Green);
+										else if(MapPlayers[i].GetLifes() == 3)
+											Game.ShowPopupMessage(names, Color.Yellow);
+										else if(MapPlayers[i].GetLifes() == 2)
+											Game.ShowPopupMessage(names, Color.Magenta);
+										else
+											Game.ShowPopupMessage(names, Color.Red);
+									}
+								}		
+								break;					
+							}
+							else{
+								if(popUpStatus && !trainingMode){
+									if(whitTimerDialog && !trainingMode){
+										if(contDialog > 5)
+										{
+											contDialog = 0;
+											names = "";
+										}
+										names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+ " is Dead";
+										pop = false;
+										dialog.SetIntervalTime(500);
+										dialog.Trigger();
+									}
+									else{
+										names = MapPlayers[i].GetFisicPlayer().GetUser().Name+ " is Dead";
+										Game.ShowPopupMessage(names,Color.Grey);}
+								}
+								if(chatStatusLives && !trainingMode)
+									Game.RunCommand("/MSG "+"Dead:"+MapPlayers[i].GetFisicPlayer().GetUser().Name);
+								MapPlayers[i] = null;
+								MapPlayers.Remove(MapPlayers[i]); 
+								break;
+							}
+						}else{
+							MapPlayers[i] = null;
+							MapPlayers.Remove(MapPlayers[i]); 
+						}
+						break;
+					}	
+				}
+			}
+		}
+
+
+
+		public Vector2 RandomSpawn(){
+			int rand = random.Next(Game.GetObjectsByName("SpawnPlayer").Length);
+			return ((IObject)Game.GetObjectsByName("SpawnPlayer")[rand]).GetWorldPosition();
+		}
+
+		private void AddT_Trigger(int interval, int count, String function, String id, bool save, bool active) {
+			IObjectTimerTrigger timerTrigger = (IObjectTimerTrigger) Game.CreateObject("TimerTrigger");
+			timerTrigger.SetIntervalTime(interval);
+			timerTrigger.SetRepeatCount(count);
+			timerTrigger.SetScriptMethod(function);
+			timerTrigger.CustomId = id;
+			if(save)
+				dialog = timerTrigger;
+			if(active)
+				timerTrigger.Trigger();
+		}
+
+		private void AddD_Trigger(String function, String id) {
+			IObjectTrigger dTrigger = (IObjectTrigger) Game.CreateObject("OnPlayerDeathTrigger");
+			dTrigger.SetScriptMethod(function);
+			dTrigger.CustomId = id;
+		}
+	}
+	public void CheckPlayers(TriggerArgs args){
+		if(args.Sender is IPlayer){
+			IPlayer pl = (IPlayer)args.Sender;
+			if(pl.IsUser){ 
+				XH.CheckPlayers(pl);
+			}
+		}
+	}
+	
+	public static bool activated = true;
+	private static XHomieFunXLife XH;
+
+	public void OnStartup(){
+		if(activated){
+			if(XH == null)
+				XH = new XHomieFunXLife();
+			XH.StartXHLXF();
+		}
+	}
+	
+	public void CheckGame(TriggerArgs args){
+		XH.CheckGame();
+	}
+	public void CheckDialog(TriggerArgs args){
+		XH.CheckDialog();
+	}
+
+	//                       XHomieFunxLife 1.1V                        
+	// <=========================<F-XHOMIE>============================>
+	// <===============<XHomieFunxLife for the Community>==============>
