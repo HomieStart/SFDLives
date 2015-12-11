@@ -7,6 +7,6 @@ Visit the page [XHomie](https://www.facebook.com/XHomie-193452574328727/?ref=ts&
 
 # Reviews
 
-Now you can take lives once the games you want!
+Now you can have lives in the games you want !
 
 Copyright © 2015 Freddy XHomie Tr.x.homie@gmail.com
