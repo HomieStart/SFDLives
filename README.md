@@ -1,7 +1,7 @@
 # SFDLives
 
 # XHomieFunxLife on SFD!
-Version Debug
+Version: 1.0v
 
 Visit the page [XHomie](https://www.facebook.com/XHomie-193452574328727/?ref=ts&fref=ts!)
 
