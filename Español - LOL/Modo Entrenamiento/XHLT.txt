@@ -12,16 +12,16 @@
 	public class XHomieFunXLife
       /*<====================================================================>
 		   <====== Setting for you custom game, you can change =========>*/{
-	        private static bool trainingMode = false; // if false you and others Never die
-		private static int liveOnStart = 3; // Lives for All
-		private static float timeForSpawn = 5000f; // time for respawn
-		private static bool rulesOfThisMod = true; // if rules given of this mod
-		private static bool whitTimerDialog = true;  // if the status have time for hide
-		private static bool popUpStatus = true; // show a status message
-		private static bool gibPlayer = false; // if gib the player when respawn
-		private static int largeOfName = 5; // large of name on status whitout timer for hide
-		private static bool chatStatusLives = false; // if show status in the chat
-		private static bool sharedItemOfStart = true; // if the players share first items
+	        private static bool trainingMode = true; // Si es falso, Nunca perderas vidas ni tus compañeros
+		private static int liveOnStart = 3; // Vidas para todos
+		private static float timeForSpawn = 5000f; // Tiempo para revivir
+		private static bool rulesOfThisMod = true; // Si las reglas, son de este mod
+		private static bool whitTimerDialog = true;  // Si el los mensajes de Estado, desaparecen
+		private static bool popUpStatus = true; // Si se muestran mensajes de Estado
+		private static bool gibPlayer = false; // Si explotar el cuerpo del personaje al revivir
+		private static int largeOfName = 5; // Largo del nombre a ocultar en caso de usar sin tiempo de mensajes
+		private static bool chatStatusLives = false; // Si mostrar estado en el chat
+		private static bool sharedItemOfStart = true; // Si los jugadores comparten armas al revivir
 		// <====================================================================>
 		// <================<properties>=================>
 		private static List<PlayerTeam> teams;
@@ -118,14 +118,17 @@
 		public void StartXHLXF(){
 			Game.RunCommand("/MSG "+"XHomieFunXLife: 1.0v");
 			if(!trainingMode){
+				trainingMode = true;
+				StartXHLXF();
+				return;
 				if(liveOnStart > 1)
-					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" lives");
+					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" Vidas");
 				else
-					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" live");
+					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" Vida");
 			}
 			else{
 				liveOnStart = 999;
-				Game.RunCommand("/MSG "+"TRAINING MODE: ON");
+				Game.RunCommand("/MSG "+"MODO ENTRENAMIENTO: ON");
 			}
 			contDialog = 0;
 			spawners = 0;
@@ -141,7 +144,6 @@
 			AddD_Trigger("CheckPlayers","XH-3002");
 			if(trainingMode)
 				Game.ShowPopupMessage("TRAINING MODE",Color.Green);
-
 		}
 
 		public void CheckDialog(){
@@ -162,8 +164,6 @@
 
 		public void CheckGame(){
 			if(!Game.IsGameOver){
-				if(rulesOfThisMod && !trainingMode)
-					CheckGameOver();
 				if(trainingMode)
 					CheckNewUserActive();
 				if(spawners > 0){
@@ -256,60 +256,6 @@
 			return false;
 		}
 
-		private void CheckGameOver(){
-			if(MapPlayers.Count <= 0){
-				Game.SetGameOver("No Players Wins");
-				return;
-			}
-			else{
-				if(gameStart){
-					int playersOnTeam = 0;
-					foreach(Player pl in MapPlayers){
-						if(!teams.Contains(pl.GetFisicPlayer().GetTeam()))
-							teams.Add(pl.GetFisicPlayer().GetTeam());
-						if(teams[0] == pl.GetFisicPlayer().GetTeam() && teams.Count < 2)
-							playersOnTeam++;
-						else{
-							teams.Clear();
-							return;
-						}
-					}
-					String msj = "";
-					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
-						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
-						if(MapPlayers[0].GetLifes()>0)
-							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
-						else if(MapPlayers[0].GetLifes()==0)
-							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
-						else
-							msj = msj + " Is Winner!";
-						Game.SetGameOver(msj);
-						return;
-					}
-					else if(teams[0] != PlayerTeam.Independent){
-						switch(teams[0]){
-						case PlayerTeam.Team1 : msj = "Blue Team"; break;
-						case PlayerTeam.Team2 : msj = "Red Team"; break;
-						case PlayerTeam.Team3 : msj = "Green Team"; break;
-						case PlayerTeam.Team4 : msj = "Yellow Team"; break;
-						}; 
-						if(playersOnTeam > 1){
-							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"\nAnd the "+msj+" Are the Winners!");
-							return;}
-						else {
-							if(MapPlayers[0].GetLifes()>0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Lives and " + msj + " Are the Winners!";
-							else if(MapPlayers[0].GetLifes()==0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Live and " + msj + " Are the Winners!";
-							else
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the Winners!";
-							Game.SetGameOver(msj);
-						}return;
-					}
-				}
-			}
-		}
-
 		private void PortatePopUp(){
 			if(popUpStatus && !Game.IsGameOver){
 				if(!pop)
@@ -375,7 +321,7 @@
 										}
 										if(MapPlayers[i].GetLifes() > 1)
 											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
-										if(MapPlayers[i].GetLifes() > 1)
+										else
 											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
 										pop = false;
 										dialog.SetIntervalTime(500);
@@ -406,13 +352,13 @@
 											contDialog = 0;
 											names = "";
 										}
-										names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+ " is Dead";
+										names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+ " Ha Caido!";
 										pop = false;
 										dialog.SetIntervalTime(500);
 										dialog.Trigger();
 									}
 									else{
-										names = MapPlayers[i].GetFisicPlayer().GetUser().Name+ " is Dead";
+										names = MapPlayers[i].GetFisicPlayer().GetUser().Name+ " Ha Caido!";
 										Game.ShowPopupMessage(names,Color.Grey);}
 								}
 								if(chatStatusLives && !trainingMode)

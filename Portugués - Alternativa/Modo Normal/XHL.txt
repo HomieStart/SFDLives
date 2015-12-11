@@ -12,16 +12,16 @@
 	public class XHomieFunXLife
       /*<====================================================================>
 		   <====== Setting for you custom game, you can change =========>*/{
-	        private static bool trainingMode = false; // if false you and others Never die
-		private static int liveOnStart = 3; // Lives for All
-		private static float timeForSpawn = 5000f; // time for respawn
-		private static bool rulesOfThisMod = true; // if rules given of this mod
-		private static bool whitTimerDialog = true;  // if the status have time for hide
-		private static bool popUpStatus = true; // show a status message
-		private static bool gibPlayer = false; // if gib the player when respawn
-		private static int largeOfName = 5; // large of name on status whitout timer for hide
-		private static bool chatStatusLives = false; // if show status in the chat
-		private static bool sharedItemOfStart = true; // if the players share first items
+	        private static bool trainingMode = false; // Se false, você nunca perde vidas ou seus colegas
+		private static int liveOnStart = 3; // Mora para todos
+		private static float timeForSpawn = 5000f; // Tempo para reavivar
+		private static bool rulesOfThisMod = true; // Se as regras são para este mod
+		private static bool whitTimerDialog = true;  // Se as mensagens de status desaparecer
+		private static bool popUpStatus = true; // Se as mensagens de status são exibidas
+		private static bool gibPlayer = false; // Se as mensagens de status são exibidas
+		private static int largeOfName = 5; // Comprimento de nome para se esconder em caso de utilização de mensagem intemporal
+		private static bool chatStatusLives = false; // Se o estado no show de chat
+		private static bool sharedItemOfStart = true; // Se armas jogadores compartilham de reavivar
 		// <====================================================================>
 		// <================<properties>=================>
 		private static List<PlayerTeam> teams;
@@ -119,13 +119,13 @@
 			Game.RunCommand("/MSG "+"XHomieFunXLife: 1.0v");
 			if(!trainingMode){
 				if(liveOnStart > 1)
-					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" lives");
+					Game.RunCommand("/MSG "+"VIDA PARA TODOS: "+liveOnStart+" Vidas");
 				else
-					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" live");
+					Game.RunCommand("/MSG "+"VIDA PARA TODOS: "+liveOnStart+" Vida");
 			}
 			else{
 				liveOnStart = 999;
-				Game.RunCommand("/MSG "+"TRAINING MODE: ON");
+				Game.RunCommand("/MSG "+"MODO DE TREINAMENTO: ON");
 			}
 			contDialog = 0;
 			spawners = 0;
@@ -140,8 +140,7 @@
 			}
 			AddD_Trigger("CheckPlayers","XH-3002");
 			if(trainingMode)
-				Game.ShowPopupMessage("TRAINING MODE",Color.Green);
-
+				Game.ShowPopupMessage("MODO DE TREINAMENTO",Color.Green);
 		}
 
 		public void CheckDialog(){
@@ -258,7 +257,7 @@
 
 		private void CheckGameOver(){
 			if(MapPlayers.Count <= 0){
-				Game.SetGameOver("No Players Wins");
+				Game.SetGameOver("Não há vencedores!");
 				return;
 			}
 			else{
@@ -278,31 +277,31 @@
 					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
 						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
 						if(MapPlayers[0].GetLifes()>0)
-							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
+							msj = msj + " É o Vencedor!"+"\nSobreviveram com "+(MapPlayers[0].GetLifes()+1)+" Vidas";
 						else if(MapPlayers[0].GetLifes()==0)
-							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
+							msj = msj + " É o Vencedor!"+"\nSobreviveram com  "+(MapPlayers[0].GetLifes()+1)+" Vida";
 						else
-							msj = msj + " Is Winner!";
+							msj = msj + " É o Vencedor!";
 						Game.SetGameOver(msj);
 						return;
 					}
 					else if(teams[0] != PlayerTeam.Independent){
 						switch(teams[0]){
-						case PlayerTeam.Team1 : msj = "Blue Team"; break;
-						case PlayerTeam.Team2 : msj = "Red Team"; break;
-						case PlayerTeam.Team3 : msj = "Green Team"; break;
-						case PlayerTeam.Team4 : msj = "Yellow Team"; break;
+						case PlayerTeam.Team1 : msj = "Grupo Azul"; break;
+						case PlayerTeam.Team2 : msj = "Grupo vermelho"; break;
+						case PlayerTeam.Team3 : msj = "Grupo Verde"; break;
+						case PlayerTeam.Team4 : msj = "Grupo amarelo"; break;
 						}; 
 						if(playersOnTeam > 1){
-							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"\nAnd the "+msj+" Are the Winners!");
+							Game.SetGameOver(playersOnTeam+" jogadores sobreviveram e "+msj+" Eles são os vencedores!");
 							return;}
 						else {
 							if(MapPlayers[0].GetLifes()>0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Lives and " + msj + " Are the Winners!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " ele sobreviveu!"+"\nCom "+(MapPlayers[0].GetLifes()+1)+" Vidas e " + msj + " Eles são os vencedores!";
 							else if(MapPlayers[0].GetLifes()==0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Live and " + msj + " Are the Winners!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " ele sobreviveu!"+"\nCom"+(MapPlayers[0].GetLifes()+1)+" Vida e " + msj + " Eles são os vencedores!";
 							else
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the Winners!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " ele sobreviveu e " + msj + " Eles são os vencedores!";
 							Game.SetGameOver(msj);
 						}return;
 					}
@@ -375,7 +374,7 @@
 										}
 										if(MapPlayers[i].GetLifes() > 1)
 											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
-										if(MapPlayers[i].GetLifes() > 1)
+										else
 											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
 										pop = false;
 										dialog.SetIntervalTime(500);
@@ -406,13 +405,13 @@
 											contDialog = 0;
 											names = "";
 										}
-										names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+ " is Dead";
+										names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+ " Ha Caido!";
 										pop = false;
 										dialog.SetIntervalTime(500);
 										dialog.Trigger();
 									}
 									else{
-										names = MapPlayers[i].GetFisicPlayer().GetUser().Name+ " is Dead";
+										names = MapPlayers[i].GetFisicPlayer().GetUser().Name+ " Ha Caido!";
 										Game.ShowPopupMessage(names,Color.Grey);}
 								}
 								if(chatStatusLives && !trainingMode)

@@ -159,6 +159,15 @@
 				}
 			}
 		}
+		
+		private String flwchk(){
+			if(victory == null){
+				victory = new String[]{"Flawless Victory!","Excelent!","Thug Life","Wow","Cool!"};
+			}
+			int r = random.Next(victory.Length);
+			return victory[r];
+		}
+
 
 		public void CheckGame(){
 			if(!Game.IsGameOver){
@@ -278,11 +287,13 @@
 					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
 						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
 						if(MapPlayers[0].GetLifes()>0)
-							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
+							msj = msj + " Is the f*cking master!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
 						else if(MapPlayers[0].GetLifes()==0)
-							msj = msj + " Is Winner!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
+							msj = msj + " Is the f*cking master!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
 						else
-							msj = msj + " Is Winner!";
+							msj = msj + " Is the f*cking master!";
+						if((MapPlayers[0].GetLifes()+1) == liveOnStart)
+							msj = msj + "\nMax lives "+flwchk();
 						Game.SetGameOver(msj);
 						return;
 					}
@@ -294,15 +305,17 @@
 						case PlayerTeam.Team4 : msj = "Yellow Team"; break;
 						}; 
 						if(playersOnTeam > 1){
-							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"\nAnd the "+msj+" Are the Winners!");
+							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"\nAnd the "+msj+" Are the f*cking Winners!");
 							return;}
 						else {
 							if(MapPlayers[0].GetLifes()>0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Lives and " + msj + " Are the Winners!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Lives and " + msj + " Are the f*cking Winners!";
 							else if(MapPlayers[0].GetLifes()==0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Live and " + msj + " Are the Winners!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Survive!"+"\nWhit "+(MapPlayers[0].GetLifes()+1)+" Live and " + msj + " Are the f*cking Winners!";
 							else
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the Winners!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the f*cking Winners!";
+							if((MapPlayers[0].GetLifes()+1) == liveOnStart)
+								msj = msj + "\nMax lives "+flwchk();
 							Game.SetGameOver(msj);
 						}return;
 					}

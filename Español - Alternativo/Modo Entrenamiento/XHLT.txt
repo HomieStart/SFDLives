@@ -116,7 +116,7 @@
 		}
 
 		public void StartXHLXF(){
-			Game.RunCommand("/MSG "+"XHomieFunXLife: Alpha");
+			Game.RunCommand("/MSG "+"XHomieFunXLife: 1.0v");
 			if(!trainingMode){
 				trainingMode = true;
 				StartXHLXF();
@@ -143,7 +143,7 @@
 			}
 			AddD_Trigger("CheckPlayers","XH-3002");
 			if(trainingMode)
-				Game.ShowPopupMessage("TRAINING MODE",Color.Green);
+				Game.ShowPopupMessage("MODO ENTRENAMIENTO",Color.Green);
 		}
 
 		public void CheckDialog(){

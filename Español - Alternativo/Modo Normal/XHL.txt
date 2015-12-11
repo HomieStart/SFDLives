@@ -116,12 +116,12 @@
 		}
 
 		public void StartXHLXF(){
-			Game.RunCommand("/MSG "+"XHomieFunXLife: Alpha");
+			Game.RunCommand("/MSG "+"XHomieFunXLife: 1.0v");
 			if(!trainingMode){
 				if(liveOnStart > 1)
-					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" Vidas");
+					Game.RunCommand("/MSG "+"VIDA PARA TODOS: "+liveOnStart+" Vidas");
 				else
-					Game.RunCommand("/MSG "+"LIVES FOR ALL: "+liveOnStart+" Vida");
+					Game.RunCommand("/MSG "+"VIDA PARA TODOS: "+liveOnStart+" Vida");
 			}
 			else{
 				liveOnStart = 999;
@@ -140,7 +140,7 @@
 			}
 			AddD_Trigger("CheckPlayers","XH-3002");
 			if(trainingMode)
-				Game.ShowPopupMessage("TRAINING MODE",Color.Green);
+				Game.ShowPopupMessage("MODO ENTRENAMIENTO",Color.Green);
 		}
 
 		public void CheckDialog(){
