@@ -311,7 +311,7 @@
 									if(MapPlayers[i].GetLifes() > 1)
 										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Lives Left");
 									else
-										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Live Left!!");
+										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Live Left !!");
 								if(popUpStatus && !trainingMode){
 									if(whitTimerDialog){
 										contDialog++;
@@ -323,7 +323,7 @@
 										if(MapPlayers[i].GetLifes() > 1)
 											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
 										if(MapPlayers[i].GetLifes() > 1)
-											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
+											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left !!";
 										pop = false;
 										dialog.SetIntervalTime(500);
 										dialog.Trigger();}
@@ -331,7 +331,7 @@
 										if(MapPlayers[i].GetLifes() > 1)
 											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
 										else
-											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
+											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left !!";
 										if(MapPlayers[i].GetLifes() > 5)
 											Game.ShowPopupMessage(names, Color.Blue);
 										else if(MapPlayers[i].GetLifes() > 3 && MapPlayers[i].GetLifes() < 6)

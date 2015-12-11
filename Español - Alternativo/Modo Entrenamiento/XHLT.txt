@@ -308,9 +308,9 @@
 								spawners++;
 								if(chatStatusLives)
 									if(MapPlayers[i].GetLifes() > 1)
-										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Lives Left");
+										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Vidas Restantes");
 									else
-										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Live Left!!");
+										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" LVida Restante !!");
 								if(popUpStatus && !trainingMode){
 									if(whitTimerDialog){
 										contDialog++;
@@ -320,17 +320,17 @@
 											names = "";
 										}
 										if(MapPlayers[i].GetLifes() > 1)
-											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
+											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Vidas Restantes";
 										else
-											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
+											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" LVida Restante";
 										pop = false;
 										dialog.SetIntervalTime(500);
 										dialog.Trigger();}
 									else{
 										if(MapPlayers[i].GetLifes() > 1)
-											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
+											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Vidas Restantes";
 										else
-											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
+											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Vida Restante !!";
 										if(MapPlayers[i].GetLifes() > 5)
 											Game.ShowPopupMessage(names, Color.Blue);
 										else if(MapPlayers[i].GetLifes() > 3 && MapPlayers[i].GetLifes() < 6)

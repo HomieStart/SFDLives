@@ -35,6 +35,7 @@
 		private static bool pop;	 
 		private static int users;
 		private static int spawners;
+		private static String[] victory;
 		// <===================<XCODE>=================>
 		private class Player{
 			private bool live = true;
@@ -267,7 +268,7 @@
 
 		private void CheckGameOver(){
 			if(MapPlayers.Count <= 0){
-				Game.SetGameOver("No Players Wins");
+				Game.SetGameOver("No Players Wins!");
 				return;
 			}
 			else{
@@ -287,13 +288,14 @@
 					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
 						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
 						if(MapPlayers[0].GetLifes()>0)
-							msj = msj + " Is the f*cking master!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
+							msj = msj + " Is the f*cking master!"+"\nSurvive whit "+(MapPlayers[0].GetLifes()+1)+" Lives";
 						else if(MapPlayers[0].GetLifes()==0)
-							msj = msj + " Is the f*cking master!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
+							msj = msj + " Is the f*cking master!"+"\nSurvive whit "+(MapPlayers[0].GetLifes()+1)+" Live";
 						else
 							msj = msj + " Is the f*cking master!";
 						if((MapPlayers[0].GetLifes()+1) == liveOnStart)
 							msj = msj + "\nMax lives "+flwchk();
+							victory = null;
 						Game.SetGameOver(msj);
 						return;
 					}
@@ -316,6 +318,7 @@
 								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Survive and the " + msj + " Are the f*cking Winners!";
 							if((MapPlayers[0].GetLifes()+1) == liveOnStart)
 								msj = msj + "\nMax lives "+flwchk();
+								victory = null;
 							Game.SetGameOver(msj);
 						}return;
 					}
@@ -377,7 +380,7 @@
 									if(MapPlayers[i].GetLifes() > 1)
 										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Lives Left");
 									else
-										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Live Left!!");
+										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Live Left !!");
 								if(popUpStatus && !trainingMode){
 									if(whitTimerDialog){
 										contDialog++;
@@ -388,8 +391,8 @@
 										}
 										if(MapPlayers[i].GetLifes() > 1)
 											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
-										if(MapPlayers[i].GetLifes() > 1)
-											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
+										else
+											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left !!";
 										pop = false;
 										dialog.SetIntervalTime(500);
 										dialog.Trigger();}

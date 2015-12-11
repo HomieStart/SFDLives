@@ -35,6 +35,7 @@
 		private static bool pop;	 
 		private static int users;
 		private static int spawners;
+		//private static String[] victory;
 		// <===================<XCODE>=================>
 		private class Player{
 			private bool live = true;
@@ -158,7 +159,15 @@
 				}
 			}
 		}
-
+		/*
+		private String flwchk(){
+			if(victory == null){
+				victory = new String[]{"Flawless Victory!","Excelent!","Thug Life","Wow","Cool!"};
+			}
+			int r = random.Next(victory.Length);
+			return victory[r];
+		}
+		*/
 		public void CheckGame(){
 			if(!Game.IsGameOver){
 				if(rulesOfThisMod && !trainingMode)
@@ -277,12 +286,15 @@
 					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
 						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
 						if(MapPlayers[0].GetLifes()>0)
-							msj = msj + " Es el Ganador!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Vidas";
+							msj = msj + " Es el Ganador!"+"\nSobrevivió con "+(MapPlayers[0].GetLifes()+1)+" Vidas";
 						else if(MapPlayers[0].GetLifes()==0)
-							msj = msj + " Es el Ganador!"+"\n Survive whit "+(MapPlayers[0].GetLifes()+1)+" Vida";
+							msj = msj + " Es el Ganador!"+"\nSobrevivió con "+(MapPlayers[0].GetLifes()+1)+" Vida";
 						else
 							msj = msj + " Es el Ganador!";
-						Game.SetGameOver(msj);
+						/*if((MapPlayers[0].GetLifes()+1) == liveOnStart)
+								msj = msj + "\nMax lives "+flwchk();
+								victory = null;
+						*/Game.SetGameOver(msj);
 						return;
 					}
 					else if(teams[0] != PlayerTeam.Independent){
@@ -297,12 +309,15 @@
 							return;}
 						else {
 							if(MapPlayers[0].GetLifes()>0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivio!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vidas y " + msj + " Son los Ganadores!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivió!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vidas y " + msj + " Son los Ganadores!";
 							else if(MapPlayers[0].GetLifes()==0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Sobrevivio!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vida y " + msj + " Son los Ganadores!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Sobrevivió!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vida y " + msj + " Son los Ganadores!";
 							else
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivio y el " + msj + " Son los Ganadores!";
-							Game.SetGameOver(msj);
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivió y el " + msj + " Son los Ganadores!";
+							/*if((MapPlayers[0].GetLifes()+1) == liveOnStart)
+								msj = msj + "\nMax lives "+flwchk();
+								victory = null;
+							*/Game.SetGameOver(msj);
 						}return;
 					}
 				}
@@ -361,9 +376,9 @@
 								spawners++;
 								if(chatStatusLives)
 									if(MapPlayers[i].GetLifes() > 1)
-										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Lives Left");
+										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Vidas Restante");
 									else
-										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Live Left!!");
+										Game.RunCommand("/MSG "+MapPlayers[i].GetFisicPlayer().GetUser().Name+": "+MapPlayers[i].GetLifes()+" Vida Restante !!");
 								if(popUpStatus && !trainingMode){
 									if(whitTimerDialog){
 										contDialog++;
@@ -373,17 +388,17 @@
 											names = "";
 										}
 										if(MapPlayers[i].GetLifes() > 1)
-											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
+											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Vidas Restante";
 										else
-											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
+											names = names+"\n"+ MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Vida Restante!!";
 										pop = false;
 										dialog.SetIntervalTime(500);
 										dialog.Trigger();}
 									else{
 										if(MapPlayers[i].GetLifes() > 1)
-											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Lives Left";
+											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Vidas Restantes";
 										else
-											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Live Left!!";
+											names = MapPlayers[i].GetFisicPlayer().GetUser().Name+" : "+MapPlayers[i].GetLifes()+" Vida Restantes!!";
 										if(MapPlayers[i].GetLifes() > 5)
 											Game.ShowPopupMessage(names, Color.Blue);
 										else if(MapPlayers[i].GetLifes() > 3 && MapPlayers[i].GetLifes() < 6)
