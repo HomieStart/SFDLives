@@ -25,7 +25,7 @@
 	 */
 	public class XHomieFunXLife{
 		// <====== Setting for you custom game, you can change =========>
-		private static bool trainingMode = true; // if Never die
+		private static bool trainingMode = false; // if Never die
 		private static int liveOnStart = 3; // Lives for All
 		private static float timeForSpawn = 5000f; // time for respawn
 		private static bool rulesOfThisMod = true; // if rules given of this mod
@@ -149,7 +149,7 @@
 			AddT_Trigger(0,0,"CheckGame","XH-3001",false,true);
 			if(whitTimerDialog){
 				if(dialog == null)
-					AddT_Trigger(5000,0,"CheckDialog","XH-3001",true,false);		
+					AddT_Trigger(5000,1,"CheckDialog","XH-3001",true,false);		
 			}
 			AddD_Trigger("CheckPlayers","XH-3002");
 			if(trainingMode)
@@ -163,7 +163,7 @@
 					pop = true;
 					dialog.SetIntervalTime(2500);
 					dialog.Trigger();
-					Game.ShowPopupMessage(names, Color.Cyan);
+					Game.ShowPopupMessage(names, Color.Green);
 				}
 				else if(pop){
 					pop = false;
@@ -307,7 +307,7 @@
 						case PlayerTeam.Team4 : msj = "Yellow Team"; break;
 						}; 
 						if(playersOnTeam > 1){
-							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"/nAnd the "+msj+" Are the Winners!");
+							Game.SetGameOver(playersOnTeam+" Players Survive of the "+msj+"\nAnd the "+msj+" Are the Winners!");
 							return;}
 						else {
 							if(MapPlayers[0].GetLifes()>0)
