@@ -177,6 +177,7 @@
 										pl.SetTeam(MapPlayers[i].GetFisicPlayer().GetTeam());
 										pl.SetUser(MapPlayers[i].GetFisicPlayer().GetUser());
 										Game.PlayEffect("Electric",pl.GetWorldPosition());
+										Game.PlaySound("GetSlomo", pl.GetWorldPosition(), 30f);
 										if(gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved)
 											MapPlayers[i].GetFisicPlayer().Gib();
 										else if (!gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved) {

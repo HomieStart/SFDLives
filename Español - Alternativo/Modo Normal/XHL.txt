@@ -185,6 +185,7 @@
 										pl.SetTeam(MapPlayers[i].GetFisicPlayer().GetTeam());
 										pl.SetUser(MapPlayers[i].GetFisicPlayer().GetUser());
 										Game.PlayEffect("Electric",pl.GetWorldPosition());
+										Game.PlaySound("GetSlomo", pl.GetWorldPosition(), 30f);
 										if(gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved)
 											MapPlayers[i].GetFisicPlayer().Gib();
 										else if (!gibPlayer && !MapPlayers[i].GetFisicPlayer().IsRemoved) {
@@ -242,6 +243,8 @@
 					IPlayer pl = Game.CreatePlayer(RandomSpawn());   
 					pl.SetProfile(user.GetProfile());
 					pl.SetUser(user);
+					Game.PlayEffect("Electric",pl.GetWorldPosition());
+					Game.PlaySound("GetSlomo", pl.GetWorldPosition(), 30f);
 					//chk pl.SetTeam(user.GetTeam());
 					if (sharedItemOfStart) {
 						Weapons = MapPlayers[0].GetWeapons();
