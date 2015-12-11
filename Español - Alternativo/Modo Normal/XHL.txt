@@ -286,9 +286,9 @@
 					if(teams[0] == PlayerTeam.Independent && playersOnTeam <= 1){
 						msj = MapPlayers[0].GetFisicPlayer().GetProfile().Name;
 						if(MapPlayers[0].GetLifes()>0)
-							msj = msj + " Es el Ganador!"+"\nSobrevivió con "+(MapPlayers[0].GetLifes()+1)+" Vidas";
+							msj = msj + " Es el Ganador!"+"\nSobrevivio con "+(MapPlayers[0].GetLifes()+1)+" Vidas";
 						else if(MapPlayers[0].GetLifes()==0)
-							msj = msj + " Es el Ganador!"+"\nSobrevivió con "+(MapPlayers[0].GetLifes()+1)+" Vida";
+							msj = msj + " Es el Ganador!"+"\nSobrevivio con "+(MapPlayers[0].GetLifes()+1)+" Vida";
 						else
 							msj = msj + " Es el Ganador!";
 						/*if((MapPlayers[0].GetLifes()+1) == liveOnStart)
@@ -309,11 +309,11 @@
 							return;}
 						else {
 							if(MapPlayers[0].GetLifes()>0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivió!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vidas y " + msj + " Son los Ganadores!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivio!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vidas y " + msj + " Son los Ganadores!";
 							else if(MapPlayers[0].GetLifes()==0)
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Sobrevivió!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vida y " + msj + " Son los Ganadores!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name  + " Sobrevivio!"+"\nCon "+(MapPlayers[0].GetLifes()+1)+" Vida y " + msj + " Son los Ganadores!";
 							else
-								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivió y el " + msj + " Son los Ganadores!";
+								msj = MapPlayers[0].GetFisicPlayer().GetUser().Name + " Sobrevivio y el " + msj + " Son los Ganadores!";
 							/*if((MapPlayers[0].GetLifes()+1) == liveOnStart)
 								msj = msj + "\nMax lives "+flwchk();
 								victory = null;
